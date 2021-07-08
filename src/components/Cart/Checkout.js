@@ -1,3 +1,4 @@
+import classes from './Checkout.module.css';
 const Checkout = (props) => {
   return (
     <form >
@@ -17,6 +18,7 @@ const Checkout = (props) => {
         <label htmlFor='city'>City</label>
         <input type='text' id='city' />
       </div>
+      <div type="button" onClick={props.onCancel}>Cancel</div>
       <button> Confirm</button>
     </form>
   );
