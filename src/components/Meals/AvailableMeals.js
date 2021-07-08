@@ -34,12 +34,18 @@ const DUMMY_MEALS = [
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(truncate);
+  const[httpError, setHttpError] = useState();
+
   useEffect(() => {
     const fetchMeals = async () => {
       // setIsLoading(true);
       const response = await fetch(
         "https://fir-project-b3903-default-rtdb.firebaseio.com/meals.json"
       );
+
+      if(!response.ok){
+        throw new Error("Something Went Wrong!");
+      }
       const responseData = await response.json();
 
       const loadedMeals = [];
@@ -55,7 +61,18 @@ const AvailableMeals = () => {
       setMeals(loadedMeals);
       setIsLoading(false);
     };
-    fetchMeals();
+
+    // try {
+    //    fetchMeals();
+    // } catch (error) {
+    //   setIsLoading(false);
+    //   setHttpError(error.message);
+    // }
+
+    fetchMeals().catch((error) =>{
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
   }, []);
 
   if(isLoading){
@@ -64,6 +81,14 @@ const AvailableMeals = () => {
         <p>Loading......</p>
       </section>
     )
+  }
+
+  if(httpError){
+    return  (
+      <section className={classes.MealsError}>
+        <p>{httpError}</p>
+      </section>
+    );
   }
   // const mealsList = DUMMY_MEALS.map((meal) => (
   const mealsList = meals.map((meal) => (
