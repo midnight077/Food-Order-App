@@ -38,10 +38,21 @@ const AvailableMeals = () => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      // setIsLoading(true);
-      const response = await fetch(
-        "https://fir-project-b3903-default-rtdb.firebaseio.com/meals.json"
-      );
+      setIsLoading(true);
+      function fakeFetch() {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              ok: true,
+              json: async () => {return DUMMY_MEALS}
+            });
+          }, 1500);
+        })
+      }
+      const response = await fakeFetch();
+      // const response = await fetch(
+      //   "https://fir-project-b3903-default-rtdb.firebaseio.com/meals.json"
+      // );
 
       if(!response.ok){
         throw new Error("Something Went Wrong!");
